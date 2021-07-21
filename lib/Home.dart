@@ -1,15 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:robot_app/Distance.dart';
+import 'package:robot_app/RemoteControl.dart';
 import 'dart:convert';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 class HomePage extends StatefulWidget {
-  final String title;
   final WebSocketChannel channel;
   Stream stream;
 
-  HomePage({Key key, this.title, @required this.channel}) : super(key: key) {
+  HomePage({Key key, @required this.channel}) : super(key: key) {
     this.stream = this.channel.stream.asBroadcastStream();
   }
 
@@ -26,7 +25,7 @@ class _HomePageState extends State<HomePage> {
   String _parseData(dynamic data) {
     try {
       Map<String, dynamic> dataJson = json.decode(data);
-
+      print(dataJson);
       if (dataJson.containsKey('distance')) {
         print(dataJson['distance']);
         return dataJson['distance'].toString();
@@ -45,104 +44,110 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                "Home",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    color: Colors.red,
+                    fontSize: 60,
+                    fontWeight: FontWeight.bold),
+              )
+            ],
+          ),
+          Center(
+            child: Column(
               children: <Widget>[
-                Text(
-                  widget.title,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      color: Colors.red,
-                      fontSize: 60,
-                      fontWeight: FontWeight.bold),
+                IconButton(
+                  icon: const Icon(Icons.arrow_upward),
+                  onPressed: () {
+                    this._sendMessage("forward");
+                  },
                 )
               ],
             ),
-            Center(
-              child: Column(
-                children: <Widget>[
+          ),
+          Column(
+            children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
                   IconButton(
-                    icon: const Icon(Icons.arrow_upward),
+                    icon: const Icon(Icons.arrow_back),
                     onPressed: () {
-                      this._sendMessage("forward");
+                      this._sendMessage("left");
+                    },
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.arrow_forward),
+                    onPressed: () {
+                      this._sendMessage("right");
                     },
                   )
                 ],
               ),
-            ),
-            Column(
+            ],
+          ),
+          Center(
+            child: Column(
               children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.arrow_back),
-                      onPressed: () {
-                        this._sendMessage("left");
-                      },
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.arrow_forward),
-                      onPressed: () {
-                        this._sendMessage("right");
-                      },
-                    )
-                  ],
-                ),
+                IconButton(
+                  icon: const Icon(Icons.arrow_downward),
+                  onPressed: () {
+                    this._sendMessage("back");
+                  },
+                )
               ],
             ),
-            Center(
-              child: Column(
-                children: <Widget>[
-                  IconButton(
-                    icon: const Icon(Icons.arrow_downward),
-                    onPressed: () {
-                      this._sendMessage("back");
-                    },
-                  )
-                ],
-              ),
+          ),
+          Center(
+            child: StreamBuilder(
+              stream: widget.stream,
+              builder: (context, snapshot) {
+                print(snapshot.error);
+                return Text(snapshot.hasData
+                    ? this._parseData(snapshot.data)
+                    : 'Empty response');
+              },
             ),
-            Center(
-              child: StreamBuilder(
+          ),
+          Row(
+            children: [
+              IconButton(
+                icon: const Icon(Icons.send),
+                onPressed: () {
+                  this._sendMessage("distance");
+                },
+              ),
+              StreamBuilder(
                 stream: widget.stream,
                 builder: (context, snapshot) {
-                  print(snapshot.error);
+                  if (snapshot.hasError) print(snapshot.error);
                   return Text(snapshot.hasData
                       ? this._parseData(snapshot.data)
                       : 'Empty response');
                 },
-              ),
-            ),
-            Row(
-              children: [
-                IconButton(
+              )
+            ],
+          ),
+          Row(
+            children: [
+              IconButton(
                   icon: const Icon(Icons.send),
                   onPressed: () {
-                    this._sendMessage("distance");
-                  },
-                ),
-                StreamBuilder(
-                  stream: widget.stream,
-                  builder: (context, snapshot) {
-                    snapshot.hasError ? print(snapshot.error) : '';
-                    return Text(snapshot.hasData
-                        ? this._parseData(snapshot.data)
-                        : 'Empty response');
-                  },
-                )
-              ],
-            )
-          ],
-        ),
+                    this._sendMessage("lcdprint: hello from flutter");
+                  }),
+            ],
+          )
+        ],
       ),
     );
   }

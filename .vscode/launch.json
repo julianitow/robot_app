@@ -5,9 +5,39 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "robot_app",
-            "request": "launch",
-            "type": "dart"
+          "name": "Flutter",
+          "request": "launch",
+          "type": "dart"
+        },
+        {
+          "name": "Android",
+          "request": "launch",
+          "type": "dart",
+          "deviceId": "emulator-5554"
+        },
+        {
+          "name": "Android - HMA",
+          "request": "launch",
+          "type": "dart",
+          "deviceId": "MUN0218927006262"
+        },
+        {
+          "name": "iPhone",
+          "request": "launch",
+          "type": "dart",
+          "deviceId": "iPhone"
+        },
+        {
+          "name": "iPad Pro",
+          "request": "launch",
+          "type": "dart",
+          "deviceId": "154C96F9-6CDE-411B-940A-CA0F49FCE727"
         }
-    ]
+      ],
+      "compounds": [
+        {
+          "name": "All Devices",
+          "configurations": ["Android", "iPhone", "iPad Pro"]
+        }
+      ]
 }
