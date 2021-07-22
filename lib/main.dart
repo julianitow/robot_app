@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
       home: Hexapod(
         title: 'Hexapod S.C',
         channel: IOWebSocketChannel.connect(
-          "wss://10.0.0.15:3000",
+          "wss://10.33.0.230:3000",
         ),
       ),
     );

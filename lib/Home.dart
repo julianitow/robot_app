@@ -63,52 +63,6 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
           Center(
-            child: Column(
-              children: <Widget>[
-                IconButton(
-                  icon: const Icon(Icons.arrow_upward),
-                  onPressed: () {
-                    this._sendMessage("forward");
-                  },
-                )
-              ],
-            ),
-          ),
-          Column(
-            children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.arrow_back),
-                    onPressed: () {
-                      this._sendMessage("left");
-                    },
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.arrow_forward),
-                    onPressed: () {
-                      this._sendMessage("right");
-                    },
-                  )
-                ],
-              ),
-            ],
-          ),
-          Center(
-            child: Column(
-              children: <Widget>[
-                IconButton(
-                  icon: const Icon(Icons.arrow_downward),
-                  onPressed: () {
-                    this._sendMessage("back");
-                  },
-                )
-              ],
-            ),
-          ),
-          Center(
             child: StreamBuilder(
               stream: widget.stream,
               builder: (context, snapshot) {

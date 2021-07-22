@@ -25,8 +25,9 @@ class _HexapodState extends State<Hexapod> {
   @override
   void initState() {
     super.initState();
-    this.rcp = RemoteControlPage();
+    this.rcp = RemoteControlPage(channel: widget.channel);
     this.hp = HomePage(channel: widget.channel);
+    this.view = hp;
   }
 
   @override
