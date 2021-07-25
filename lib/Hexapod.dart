@@ -2,15 +2,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:robot_app/Home.dart';
 import 'package:robot_app/RemoteControl.dart';
+import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 class Hexapod extends StatefulWidget {
   final String title;
-  final WebSocketChannel channel;
+  WebSocketChannel channel;
   Stream stream;
 
   Hexapod({Key key, this.title, @required this.channel}) : super(key: key) {
-    this.stream = this.channel.stream.asBroadcastStream();
+    // this.stream = this.channel.stream.asBroadcastStream();
   }
 
   @override
@@ -21,10 +22,17 @@ class _HexapodState extends State<Hexapod> {
   Widget rcp;
   Widget hp;
   Widget view;
+  List<String> alarms;
+
+  void connect() {
+    widget.channel = IOWebSocketChannel.connect("wss://10.0.0.15:3000");
+  }
 
   @override
   void initState() {
     super.initState();
+    this.connect();
+    widget.stream = widget.channel.stream.asBroadcastStream();
     this.rcp = RemoteControlPage(channel: widget.channel);
     this.hp = HomePage(channel: widget.channel);
     this.view = hp;

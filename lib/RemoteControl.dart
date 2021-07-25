@@ -3,13 +3,14 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
+import 'package:web_socket_channel/io.dart';
 
 class RemoteControlPage extends StatefulWidget {
-  final WebSocketChannel channel;
+  WebSocketChannel channel;
   Stream stream;
 
   RemoteControlPage({Key key, this.channel}) : super(key: key) {
-    this.stream = this.channel.stream.asBroadcastStream();
+    // this.stream = this.channel.stream.asBroadcastStream();
   }
 
   @override
@@ -20,6 +21,14 @@ class _RemoteControlPageState extends State<RemoteControlPage> {
   void _sendMessage(String message) {
     widget.channel.sink.add(message);
     print("send: " + message);
+  }
+
+  void connect() {
+    widget.channel = IOWebSocketChannel.connect("wss://10.0.0.15:3000");
+  }
+
+  void disconnect() {
+    widget.channel.sink.close();
   }
 
   String _parseData(dynamic data) {
@@ -38,7 +47,6 @@ class _RemoteControlPageState extends State<RemoteControlPage> {
 
   @override
   void dispose() {
-    widget.channel.sink.close();
     super.dispose();
   }
 

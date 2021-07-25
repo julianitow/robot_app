@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:robot_app/Home.dart';
 import 'package:web_socket_channel/io.dart';
 
 import 'Hexapod.dart';
@@ -20,17 +19,25 @@ class MyHttpOverrides extends HttpOverrides {
   }
 }
 
-class MyApp extends StatelessWidget {
-  // final channel = IOWebSocketChannel.connect("wss://hexapod.local:3000");
+class MyApp extends StatefulWidget {
+  IOWebSocketChannel channel;
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Hexapod(
         title: 'Hexapod S.C',
-        channel: IOWebSocketChannel.connect(
-          "wss://10.33.0.230:3000",
-        ),
+        channel: widget.channel,
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 }
