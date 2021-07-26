@@ -53,7 +53,18 @@ class _HexapodState extends State<Hexapod> {
               decoration: BoxDecoration(
                 color: Colors.blue,
               ),
-              child: Text('Hexapod System Control'),
+              child: Column(
+                children: [
+                  Image(
+                      image: AssetImage('assets/robot_logo.png'),
+                      width: 120,
+                      height: 120),
+                  Text(
+                    'Hexapod System Control',
+                    style: TextStyle(color: Colors.white),
+                  )
+                ],
+              ),
             ),
             ListTile(
               leading: Icon(Icons.home),
