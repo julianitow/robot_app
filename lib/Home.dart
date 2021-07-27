@@ -108,7 +108,7 @@ class _HomePageState extends State<HomePage> {
                   onPressed: () {
                     if (!this.isAlarmActive) {
                       this._sendMessage('wut: ' + time);
-                      this._sendMessage('alarmState');
+                      //this._sendMessage('alarmState');
                       setState(() {
                         this.isAlarmActive = true;
                       });
@@ -132,9 +132,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   void addAlarm(String name, DateTime time) {
-    String formattedTime = this.currentTime.hour.toString() +
-        ":" +
-        this.currentTime.minute.toString();
     this.alarmsString.add(time.toString());
     this.namesString.add(name);
     this.saveAlarmsSharedPrefs();
@@ -172,18 +169,7 @@ class _HomePageState extends State<HomePage> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           Column(
-            children: [
-              StreamBuilder(
-                stream: widget.channel.stream,
-                builder: (context, snapshot) {
-                  return snapshot.hasData
-                      ? Text(
-                          snapshot.data.toString(),
-                        )
-                      : CircularProgressIndicator();
-                },
-              ),
-            ],
+            children: [],
           ),
           Column(children: this.getAllCards()),
           Row(

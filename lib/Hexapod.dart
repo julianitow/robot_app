@@ -23,9 +23,21 @@ class _HexapodState extends State<Hexapod> {
   Widget hp;
   Widget view;
   List<String> alarms;
+  String endpoint = "10.0.0.15:3000";
+  TextEditingController _controller = TextEditingController();
 
   void connect() {
-    widget.channel = IOWebSocketChannel.connect("wss://10.0.0.15:3000");
+    widget.channel = IOWebSocketChannel.connect("wss://" + this.endpoint);
+  }
+
+  void disconnect() {
+    if (widget.channel == null) return;
+    widget.channel.sink.close();
+  }
+
+  void reconnect() {
+    this.disconnect();
+    this.connect();
   }
 
   @override
@@ -91,7 +103,43 @@ class _HexapodState extends State<Hexapod> {
               title: Text('Réglages'),
               onTap: () {
                 setState(() {
-                  view = Text("Je suis un text");
+                  view = Container(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        children: [
+                          TextField(
+                            controller: this._controller,
+                            decoration:
+                                InputDecoration(hintText: '10.0.0.15:3000'),
+                            onChanged: (String text) async {
+                              setState(() {
+                                this.endpoint = text;
+                              });
+                            },
+                          ),
+                          Spacer(),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Spacer(),
+                              MaterialButton(
+                                  color: Colors.green,
+                                  textColor: Colors.white,
+                                  child: Icon(Icons.check),
+                                  padding: EdgeInsets.all(16),
+                                  shape: CircleBorder(),
+                                  onPressed: () {
+                                    setState(() {
+                                      this.reconnect();
+                                    });
+                                  }),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
                 });
                 Navigator.pop(context);
               },
