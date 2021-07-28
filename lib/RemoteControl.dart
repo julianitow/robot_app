@@ -75,17 +75,12 @@ class _RemoteControlPageState extends State<RemoteControlPage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 IconButton(
-                  icon: const Icon(Icons.arrow_back),
+                  icon: const Icon(Icons.pause),
                   onPressed: () {
-                    this._sendMessage("left");
+                    this._sendMessage("stop");
                   },
                 ),
-                IconButton(
-                  icon: const Icon(Icons.arrow_forward),
-                  onPressed: () {
-                    this._sendMessage("right");
-                  },
-                )
+
               ],
             ),
           ],
